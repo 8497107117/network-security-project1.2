@@ -55,9 +55,9 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
 		encoding=serialization.Encoding.PEM,
 		format=serialization.PublicFormat.SubjectPublicKeyInfo
 	)
-	print('My public key:\n', str(myPubPem, 'utf8'))
+	print('My public key:\n', str(myPubPem, 'utf-8'))
 	# 1. Send the size in byte of Public Key's PEM file to Server
-	msg_size = len(str(myPubPem,'utf8'))
+	msg_size = len(str(myPubPem,'utf-8'))
 	byte_msg_size = struct.pack('i', msg_size)
 	sock.sendall(byte_msg_size)
 	# 2. Send Public Key's PEM file to Server
@@ -73,10 +73,10 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
 		f.close()
 	# 2. Use Server's Public Key to encrypt Student ID
 	encryptedID = TAPubKey.encrypt(
-		bytes('0216023', 'utf8'),
+		bytes('0216023', 'utf-8'),
 		padding.OAEP(
-			mgf=padding.MGF1(algorithm=hashes.SHA256()),
-	        algorithm=hashes.SHA256(),
+			mgf=padding.MGF1(algorithm=hashes.SHA1()),
+	        algorithm=hashes.SHA1(),
         	label=None
 		)
 	)
@@ -105,8 +105,8 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
 	magicNumber = myPriKey.decrypt(
 	    encryptedMagicNum,
 	    padding.OAEP(
-	        mgf=padding.MGF1(algorithm=hashes.SHA256()),
-	        algorithm=hashes.SHA256(),
+	        mgf=padding.MGF1(algorithm=hashes.SHA1()),
+	        algorithm=hashes.SHA1(),
 	        label=None
 	    )
 	)
